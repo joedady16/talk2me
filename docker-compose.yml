@@ -1,0 +1,42 @@
+services:
+  talk2me:
+    build: .
+    image: talk2me:latest
+    container_name: talk2me
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://talk2me:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@db:5432/talk2me
+      DEFAULT_VOICE: af_heart
+      MAX_UPLOAD_MB: 50
+    volumes:
+      - talk2me-data:/data      # uploads, audio cache
+      - talk2me-models:/models  # Kokoro model (downloaded on first start)
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: pgvector/pgvector:pg17
+    container_name: talk2me-db
+    environment:
+      POSTGRES_USER: talk2me
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: talk2me
+    volumes:
+      - talk2me-pg:/var/lib/postgresql/data
+    # Uncomment to reach the DB from host tools (psql, DBeaver):
+    # ports:
+    #   - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U talk2me -d talk2me"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  talk2me-data:
+  talk2me-models:
+  talk2me-pg:

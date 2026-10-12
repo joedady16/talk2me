@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Talk2Me</title>
+  <style>
+    :root {
+      --bg: #f6f5f2; --panel: #fff; --text: #1f1f1f; --muted: #6b6b6b;
+      --border: #e2e0db; --accent: #3b6fd8; --highlight: #fff1b8;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #17181a; --panel: #212226; --text: #e8e6e3; --muted: #9a9894;
+        --border: #34353a; --accent: #7aa2f7; --highlight: #4a4320;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 16px/1.5 system-ui, sans-serif; background: var(--bg); color: var(--text); }
+    header { padding: 14px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+    header h1 { font-size: 18px; margin: 0; }
+    #status { color: var(--muted); font-size: 14px; margin-left: auto; }
+    main { display: grid; grid-template-columns: 300px 1fr; height: calc(100vh - 53px); }
+    aside { border-right: 1px solid var(--border); padding: 16px; overflow-y: auto; }
+    #drop {
+      border: 2px dashed var(--border); border-radius: 10px; padding: 22px 12px; text-align: center;
+      color: var(--muted); cursor: pointer; margin-bottom: 16px; font-size: 14px;
+    }
+    #drop.over { border-color: var(--accent); color: var(--accent); }
+    #docs { list-style: none; padding: 0; margin: 0; }
+    #docs li {
+      padding: 10px 12px; border-radius: 8px; cursor: pointer; display: flex; gap: 8px; align-items: center;
+    }
+    #docs li:hover { background: var(--panel); }
+    #docs li.active { background: var(--panel); outline: 1px solid var(--border); }
+    #docs .title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #docs .progress { color: var(--muted); font-size: 12px; }
+    #docs .delete { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 16px; }
+    section { display: flex; flex-direction: column; min-height: 0; }
+    #controls {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 12px 24px;
+      border-bottom: 1px solid var(--border); background: var(--panel);
+    }
+    button, select {
+      font: inherit; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--bg); color: var(--text); cursor: pointer;
+    }
+    button:disabled { opacity: .5; cursor: default; }
+    #play { background: var(--accent); color: #fff; border-color: var(--accent); min-width: 90px; }
+    label { font-size: 14px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+    #text { padding: 24px 32px; overflow-y: auto; max-width: 820px; }
+    #text .empty { color: var(--muted); }
+    .s { cursor: pointer; border-radius: 4px; padding: 1px 0; }
+    .s:hover { text-decoration: underline dotted; }
+    .s.current { background: var(--highlight); }
+    @media (max-width: 760px) {
+      main { grid-template-columns: 1fr; height: auto; }
+      aside { border-right: 0; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Talk2Me</h1>
+    <span id="status">Loading…</span>
+  </header>
+  <main>
+    <aside>
+      <div id="drop">Drop a document here or click to upload<br><small>PDF, Word, PowerPoint, Excel, TXT, Markdown, HTML</small></div>
+      <input id="file" type="file" hidden
+             accept=".pdf,.docx,.pptx,.xlsx,.txt,.md,.markdown,.html,.htm,.csv,.json,.xml">
+      <ul id="docs"></ul>
+    </aside>
+    <section>
+      <div id="controls">
+        <button id="prev" title="Previous sentence" disabled>⏮</button>
+        <button id="play" disabled>▶ Play</button>
+        <button id="next" title="Next sentence" disabled>⏭</button>
+        <label>Voice <select id="voice"></select></label>
+        <label>Speed
+          <select id="speed">
+            <option>0.8</option><option>0.9</option><option selected>1.0</option>
+            <option>1.1</option><option>1.25</option><option>1.5</option>
+          </select>
+        </label>
+      </div>
+      <div id="text"><p class="empty">Upload or select a document to start listening.</p></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

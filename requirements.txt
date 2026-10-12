@@ -1,0 +1,8 @@
+fastapi>=0.115
+uvicorn[standard]>=0.32
+python-multipart>=0.0.12
+markitdown[pdf,docx,pptx,xlsx]>=0.1.1
+kokoro-onnx>=0.4.9
+soundfile>=0.12
+numpy>=1.26
+psycopg[binary,pool]>=3.2
