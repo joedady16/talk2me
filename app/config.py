@@ -9,7 +9,8 @@ class Settings:
     models_dir: Path = field(default_factory=lambda: Path(os.getenv("MODELS_DIR", "./models")))
     default_voice: str = os.getenv("DEFAULT_VOICE", "af_heart")
     max_upload_mb: int = int(os.getenv("MAX_UPLOAD_MB", "50"))
-    database_url: str = os.getenv("DATABASE_URL", "postgresql://talk2me:talk2me@localhost:5432/talk2me")
+    # No password default on purpose: supply it via DATABASE_URL (compose builds it from .env).
+    database_url: str = os.getenv("DATABASE_URL", "postgresql://talk2me@localhost:5432/talk2me")
     db_pool_size: int = int(os.getenv("DB_POOL_SIZE", "10"))
     # Every request runs as this user until authentication is added.
     default_user_email: str = os.getenv("DEFAULT_USER_EMAIL", "owner@localhost")
