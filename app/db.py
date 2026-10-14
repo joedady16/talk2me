@@ -56,16 +56,6 @@ def run_migrations() -> None:
             conn.execute("SELECT pg_advisory_unlock(%s)", (_MIGRATION_LOCK_ID,))
 
 
-def ensure_user(email: str, display_name: str = "") -> int:
-    with get_conn() as conn:
-        row = conn.execute(
-            "INSERT INTO users (email, display_name) VALUES (%s, %s) "
-            "ON CONFLICT (email) DO UPDATE SET email = EXCLUDED.email RETURNING id",
-            (email, display_name),
-        ).fetchone()
-    return row["id"]
-
-
 def init_db() -> None:
     run_migrations()
     pool.open(wait=True, timeout=30)

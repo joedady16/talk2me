@@ -9,6 +9,10 @@ services:
       DATABASE_URL: postgresql://talk2me:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@db:5432/talk2me
       DEFAULT_VOICE: af_heart
       MAX_UPLOAD_MB: 50
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ALLOW_SIGNUP: ${ALLOW_SIGNUP:-false}
+      COOKIE_SECURE: ${COOKIE_SECURE:-}
+      WHISPER_MODEL: ${WHISPER_MODEL:-base.en}
     volumes:
       - talk2me-data:/data      # uploads, audio cache
       - talk2me-models:/models  # Kokoro model (downloaded on first start)
